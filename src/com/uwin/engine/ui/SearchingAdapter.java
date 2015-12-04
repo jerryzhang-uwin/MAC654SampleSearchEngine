@@ -10,10 +10,12 @@ import com.uwin.engine.core.RankingMgr;
 public class SearchingAdapter {
 	
 	public static String getSearchIndicationPage() {
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append("<!DOCTYPE html>");
 		builder.append("<body>");
 		builder.append("<p><h2>Enter keyword(s) and click Search button.</h2></p>");
+		builder.append("<p>Dataset home directory: " + Settings.SEARCH_ENGINE_HOME + "</p>");
 		builder.append("</body>");
 		builder.append("</html>");
 		return builder.toString();
