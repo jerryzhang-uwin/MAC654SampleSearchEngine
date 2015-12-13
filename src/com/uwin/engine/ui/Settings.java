@@ -5,7 +5,7 @@ package com.uwin.engine.ui;
  */
 public class Settings {
 	
-	// Change this folder to your own source file location.
+	// Change this folder to your own source file location ONLY IF FAIL TO GET SYSTEM DIR
 	public static final String SEARCH_ENGINE_HOME = System.getProperty("user.dir") + "\\dataset\\";
 	
 	public static final String SOURCE_HTML_FOLDER = SEARCH_ENGINE_HOME + "\\html\\";

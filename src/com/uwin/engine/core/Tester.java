@@ -6,18 +6,20 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
+import com.uwin.engine.advanced.TST;
+
 /**
  * Only used for testing existing classes. Contains a main() method.
  */
 public class Tester {
 
-	private static final String SAMPLE_PAGE_FILE = "D:\\temp\\samplepage.txt";
-	private static final String SAMPLE_FOLDER = "D:\\temp\\searchengine\\txt\\";
-	
+//	private static final String SAMPLE_PAGE_FILE = "D:\\temp\\samplepage.txt";
+//	private static final String SAMPLE_FOLDER = "D:\\temp\\searchengine\\txt\\";
+//		
 //	public static void main(String[] args) {
 //		
-//		HashMap<String, HashMap<String, Integer>> scannedFiles 
-//				= FolderScanner.scanToHashMap(SAMPLE_FOLDER);
+//		HashMap<String, TST<Integer>> scannedFiles 
+//				= FolderScanner.scan(SAMPLE_FOLDER);
 //		
 //		//FolderScanner.iterate(scannedFiles);
 //		
@@ -37,8 +39,6 @@ public class Tester {
 //	            System.err.println("Invalid IO");
 //	        }
 //        }
-//		
-//
 //	}
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import com.uwin.engine.advanced.TST;
+
 /**
  * Responsible for scanning of all files under a folder and store fileName-frequencyHashMap entries
  * @author 
@@ -13,16 +15,17 @@ import java.util.Map.Entry;
 public class FolderScanner {
 	
 	/**
-	 * 
+	 * Scan all pages of a folder into a HashMap, with the key as file name and value the 
+	 * TST structure of that page.
 	 * @param folderName
 	 * @return
 	 */
-	public static HashMap<String, HashMap<String, Integer>> scanToHashMap(String folderName) {
+	public static HashMap<String, TST<Integer>> scan(String folderName) {
 		
 		Logging.info("Scanning all files in folder: " + folderName);
 		
-		HashMap<String, HashMap<String, Integer>> scannedFiles 
-				= new HashMap<String, HashMap<String, Integer>>();
+		HashMap<String, TST<Integer>> scannedFiles 
+				= new HashMap<String, TST<Integer>>();
 		
 		// Scan each page of the folder to Hash Maps.
 		File folder = new File(folderName);
@@ -30,8 +33,7 @@ public class FolderScanner {
 		
 		for (File file : filesInTheFolder) {
 			if (file.isFile()) {
-		    	HashMap<String, Integer> fileHashMap = PageScanner.scanToHashMap(file.getAbsolutePath());
-//		    	scannedFiles.put(file.getAbsolutePath(), fileHashMap);
+				TST<Integer> fileHashMap = PageScanner.scan(file.getAbsolutePath());
 		    	scannedFiles.put(file.getName(), fileHashMap);
 			} else {
 				Logging.err(file.getAbsolutePath() + " is not a file");
@@ -44,7 +46,7 @@ public class FolderScanner {
 	}
 	
     /**
-     * Only for debugging purpose.
+     * Only for debugging.
      * @param map
      */
     public static void iterate(HashMap<String, HashMap<String, Integer>> map) {

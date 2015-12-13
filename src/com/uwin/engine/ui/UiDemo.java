@@ -1,6 +1,16 @@
 package com.uwin.engine.ui;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
+
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -80,6 +90,30 @@ public class UiDemo extends Application {
 			        search.start();
 			    }
 			});
+			
+			
+	        webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+				@Override
+				public void changed(ObservableValue<? extends State> observableValue, State oldState, State newState) {
+					if (newState == State.SUCCEEDED) {
+						
+			            EventListener listener = new EventListener() {
+							@Override
+							public void handleEvent(Event ev) {
+								String href = ((Element)ev.getTarget()).getAttribute("href");
+								keywordInputBox.setText(href);
+							}
+			            };
+			            
+			            
+			            Document doc = webEngine.getDocument();
+//			            Element el = doc.get .getElementById("textarea");
+//			            ((EventTarget) el).addEventListener("keypress", listener, false);
+			            
+					}
+				}
+	        });
+			
 		}
 		
 		/**

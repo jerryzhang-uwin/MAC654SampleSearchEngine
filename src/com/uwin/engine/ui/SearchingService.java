@@ -2,6 +2,7 @@ package com.uwin.engine.ui;
 
 import java.util.HashMap;
 
+import com.uwin.engine.advanced.TST;
 import com.uwin.engine.core.FolderScanner;
 
 import javafx.concurrent.Service;
@@ -12,13 +13,13 @@ import javafx.concurrent.Task;
  */
 public class SearchingService extends Service<String> {
 	
-	private static 	HashMap<String, HashMap<String, Integer>> scannedFiles; 
+	private static 	HashMap<String, TST<Integer>> scannedFiles; 
 	private String keyword;
 	
 	public SearchingService(String keyword) {
 		this.keyword = keyword;
 		if (scannedFiles == null) {
-			scannedFiles = FolderScanner.scanToHashMap(Settings.SOURCE_TXT_FOLDER);
+			scannedFiles = FolderScanner.scan(Settings.SOURCE_TXT_FOLDER);
 		}
 	}
 	
