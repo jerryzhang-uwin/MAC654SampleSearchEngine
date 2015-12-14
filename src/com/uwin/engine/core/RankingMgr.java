@@ -97,8 +97,11 @@ public class RankingMgr {
 				keywordFrequency += tempFrequency;
 			}
 			
-			// Store the frequency-keyword association to the List
-			frequencyFileNamePair.add(new KeyValuePair<Integer, String>(keywordFrequency, fileName));
+			// Store the frequency-keyword association to the List if the occurrence number 
+			// is greater than 0.
+			if (keywordFrequency > 0) {
+				frequencyFileNamePair.add(new KeyValuePair<Integer, String>(keywordFrequency, fileName));
+			}
 		}
 		
 		// Sort the List by high-low frequency with Collections.sort(), which is an 

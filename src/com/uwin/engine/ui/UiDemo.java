@@ -41,6 +41,8 @@ public class UiDemo extends Application {
 		scene = new Scene(new SearchEngineUI(), 900, 700, Color.web("#666970"));
 		stage.setScene(scene);
 		stage.show();
+		//(SearchEngineUI)scene.getRoot().set
+		
 	}
 	
 	
@@ -57,13 +59,15 @@ public class UiDemo extends Application {
 		private WebView browser = new WebView();
 		private WebEngine webEngine = browser.getEngine();
 		
+		private SearchingService workerSrv = null;
+		
 		public SearchEngineUI() {
 			// Add all nodes to UI. 
 	        searchBar.getChildren().addAll(keywordInputBox, searchButton);
 			getChildren().add(searchBar);
 			getChildren().add(browser);
 			
-			webEngine.loadContent(SearchingAdapter.getSearchIndicationPage());
+			webEngine.loadContent(SearchingAdapter.getSearchInitializationPage());
 			
 			// Search button action.
 			searchButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,18 +80,21 @@ public class UiDemo extends Application {
 			    		return;
 			    	}
 			    	
-			    	// Call another background thread to do the searching, which would be time demanding.
-			    	SearchingService search = new SearchingService(keyword);
+			    	// Do nothing when search engine initialization is not finished.
+			    	if (workerSrv == null) {
+			    		return;
+			    	}
 			    	
-			        search.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			    	workerSrv = new SearchingService(keyword);
+			    	
+			    	workerSrv.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			            @Override
 			            public void handle(WorkerStateEvent t) {
-			                //System.out.println("done:" + t.getSource().getValue());
 			                webEngine.loadContent(t.getSource().getValue().toString());
 			            }
 			        });
-			        // Start the background service.
-			        search.start();
+			        // Start the background service for doing a search.
+			    	workerSrv.start();
 			    }
 			});
 			
@@ -105,15 +112,17 @@ public class UiDemo extends Application {
 							}
 			            };
 			            
-			            
+			            // TODO
 			            Document doc = webEngine.getDocument();
-//			            Element el = doc.get .getElementById("textarea");
-//			            ((EventTarget) el).addEventListener("keypress", listener, false);
+			            //Element el = doc.getElementById("textarea");
+			            //((EventTarget) el).addEventListener("keypress", listener, false);
 			            
 					}
 				}
 	        });
-			
+	        
+	        // Initialize.
+	        initializeSearchEngine();
 		}
 		
 		/**
@@ -134,8 +143,31 @@ public class UiDemo extends Application {
 	        searchButton.setPrefSize(80, 30);
 	        
 	        layoutInArea(searchBar, 0, 0, w, searchBarHeight, 0, HPos.CENTER, VPos.CENTER);
-	        layoutInArea(browser, 0, searchBarHeight + 5, w, h - searchBarHeight, 0, HPos.CENTER, VPos.CENTER);
+	        layoutInArea(browser, 0, searchBarHeight + 2, w, h - searchBarHeight, 0, HPos.CENTER, VPos.CENTER);
 	    }
+	    
+	    /**
+	     * Initialize the search engine with background service. 
+	     */
+	    private void initializeSearchEngine() {
+	    	
+	    	if (this.workerSrv != null) {
+	    		// Initialization already done.
+	    		return;
+	    	}
+	    	
+	    	workerSrv = new SearchingService("");
+	    	
+	    	workerSrv.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+	            @Override
+	            public void handle(WorkerStateEvent t) {
+	            	webEngine.loadContent(SearchingAdapter.getSearchIndicationPage());
+	            }
+	        });
+	        // Start the background service.
+	    	workerSrv.start();
+	    }
+	    
 	}
 
 }

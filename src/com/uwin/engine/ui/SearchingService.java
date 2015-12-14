@@ -18,9 +18,9 @@ public class SearchingService extends Service<String> {
 	
 	public SearchingService(String keyword) {
 		this.keyword = keyword;
-		if (scannedFiles == null) {
-			scannedFiles = FolderScanner.scan(Settings.SOURCE_TXT_FOLDER);
-		}
+//		if (scannedFiles == null) {
+//			scannedFiles = FolderScanner.scan(Settings.SOURCE_TXT_FOLDER);
+//		}
 	}
 	
 	/**
@@ -32,6 +32,14 @@ public class SearchingService extends Service<String> {
         return new Task<String>() {
             @Override
             protected String call() {
+        		if (scannedFiles == null) {
+        			scannedFiles = FolderScanner.scan(Settings.SOURCE_TXT_FOLDER);
+        			
+        			// Return null since this step is only used for search engine 
+        			// initialization (scan files).
+        			return null;
+        		}
+        		
             	return SearchingAdapter.getResultsPage(scannedFiles, keyword);
             }
         };

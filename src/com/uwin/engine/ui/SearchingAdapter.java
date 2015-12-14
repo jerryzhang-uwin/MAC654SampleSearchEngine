@@ -12,11 +12,23 @@ import com.uwin.engine.core.RankingMgr;
 
 public class SearchingAdapter {
 	
+	public static String getSearchInitializationPage() {
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<!DOCTYPE html>");
+		builder.append("<body bgcolor=\"#E0E0E0\">");
+		builder.append("<p><h2>Initializing search engine ...</h2></p>");
+		builder.append("<p>Scanning files at: " + Settings.SEARCH_ENGINE_HOME + "</p>");
+		builder.append("</body>");
+		builder.append("</html>");
+		return builder.toString();
+	}
+	
 	public static String getSearchIndicationPage() {
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("<!DOCTYPE html>");
-		builder.append("<body>");
+		builder.append("<body bgcolor=\"#E0E0E0\">");
 		builder.append("<p><h2>Enter keyword(s) and click Search button.</h2></p>");
 		builder.append("<p>Dataset home directory: " + Settings.SEARCH_ENGINE_HOME + "</p>");
 		builder.append("</body>");
@@ -31,8 +43,6 @@ public class SearchingAdapter {
 			String keywordsLine) {
 		
 		RankingMgr ranker = new RankingMgr(scannedFiles);
-//		List<KeyValuePair<Integer, String>> resultList = ranker.rankPagesBySingleKeyword(keyword);
-		
 		List<String> keywords = filterKeywords(keywordsLine);
 		List<KeyValuePair<Integer, String>> resultList = ranker.rankPagesByMultipleKeywords(keywords);
 		
@@ -40,27 +50,43 @@ public class SearchingAdapter {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<!DOCTYPE html>");
 		builder.append("<head><title>Search Results</title></head>");
-		builder.append("<body>");
+		builder.append("<body bgcolor=\"#E0E0E0\">");
 		
+
 		String separatedKeywords = "";
 		for (String s : keywords) {
-			separatedKeywords += "\"" + s + "\" "; 
+			separatedKeywords += " " + "<span style=\"font-weight:bold;background-color:#0000FF;color:#FFFF00\">" 
+					+ s + "</span>" + " "; 
 		}
 		
-		builder.append("<p><h2>Search results for keyword(s): " + separatedKeywords + "</h2></p>");
-		
-		for (KeyValuePair<Integer, String> line : resultList) {
-			String freq = String.valueOf(line.getKey());
-			String title = String.valueOf(line.getValue().replace(".txt", ""));
+
+		if (resultList.isEmpty()) {
+			// Append indication text for void matches.
+			builder.append("<p><h2>Your search for keyword(s): " + separatedKeywords 
+					+ "did not match any pages" + "</h2></p>");
+		} else {
+			// Append indication text.
+			builder.append("<p><h2>Search results for keyword(s):" + separatedKeywords + "</h2></p>");
+			int match = resultList.size();
+			builder.append("<p>Matches found in " 
+			+ "<span style=\"font-weight:bold\">" + match + "</span>" 
+			+ (match > 1 ? " pages" : " page") + "</p>");
 			
-			builder.append("<p>" 
-					+ "<span style=\"color:black;background-color:#ffff66;padding:0 5px;font-weight:bold\">"
-					+ freq 
-					+ "</span>"
-					+ "<span style=\"padding:0 10px;\"></span>" 
-					+ "<a href=\"" 
-					+ Settings.URL_HTML_FOLDER
-					+ title + "\">" + title + "</a></p>");
+			// Append result list.
+			for (KeyValuePair<Integer, String> line : resultList) {
+				String freq = String.valueOf(line.getKey());
+				String title = String.valueOf(line.getValue().replace(".txt", ""));
+				
+				builder.append("<p>" 
+						+ "<span style=\"padding:0 30px;\"></span>"
+						+ "<span style=\"color:black;background-color:#ffff66;padding:0 5px;font-weight:bold\">"
+						+ freq 
+						+ "</span>"
+						+ "<span style=\"padding:0 10px;\"></span>" 
+						+ "<a href=\"" 
+						+ Settings.URL_HTML_FOLDER
+						+ title + "\">" + title + "</a></p>");
+			}
 		}
 		
 		builder.append("</body>");
