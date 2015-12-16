@@ -63,8 +63,8 @@ public class PageScanner {
     	openFile(file);
     	
     	while (!isEmpty()) {
-    		// Read next String
-    		stringKey = readStringByPattern(WHITESPACE_PATTERN);
+    		// Read next String. And case insensitive - all keywords are converted to lower case.
+    		stringKey = readStringByPattern(WHITESPACE_PATTERN).toLowerCase();
     		
     		if (pageHashMap.contains(stringKey)) {
     			// When a key is found, increase its value by 1

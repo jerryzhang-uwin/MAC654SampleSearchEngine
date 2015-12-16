@@ -90,7 +90,8 @@ public class RankingMgr {
 					continue;
 				}
 				
-				tempFrequency = pageEntry.getValue().get(keyword);
+				// Each keyword is converted to lower case, so that the searching is case insensitive.
+				tempFrequency = pageEntry.getValue().get(keyword.toLowerCase());
 				if (tempFrequency == null) {
 					tempFrequency = 0;
 				}
